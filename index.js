@@ -20,23 +20,23 @@ const DIFFICULTY_SETTINGS = {
   hard: { pairs: 9, time: 120 }
 };
 
-// Initialize game
+
 async function initGame() {
   const difficulty = $('#difficulty').val();
   gameState.difficulty = difficulty;
   gameState.totalPairs = DIFFICULTY_SETTINGS[difficulty].pairs;
   gameState.timeLeft = DIFFICULTY_SETTINGS[difficulty].time;
   
-  // Clear existing cards
+
   $('#game_grid').empty();
   
-  // Fetch and create cards
+
   await createCards();
   
-  // Update stats
+
   updateStats();
   
-  // Enable power-up after 3 matches
+
   gameState.powerUpAvailable = false;
   $('#power-up-btn').prop('disabled', true);
 }
@@ -49,16 +49,16 @@ async function createCards() {
     const data = await response.json();
     const pokemonList = data.results;
     
-    // Shuffle and select unique Pokemon
+
     const selectedPokemon = shuffleArray(pokemonList)
       .slice(0, gameState.totalPairs)
       .map(pokemon => pokemon.url);
     
-    // Create pairs of cards
+
     const cardPairs = [...selectedPokemon, ...selectedPokemon];
     gameState.cards = shuffleArray(cardPairs);
     
-    // Create card elements
+    
     gameState.cards.forEach((pokemonUrl, index) => {
       const card = $(`
         <div class="card" data-index="${index}">
@@ -81,7 +81,7 @@ async function createCards() {
   }
 }
 
-// Shuffle array using Fisher-Yates algorithm
+
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -90,7 +90,7 @@ function shuffleArray(array) {
   return array;
 }
 
-// Handle card click
+
 function handleCardClick() {
   if (gameState.isLocked) return;
   if ($(this).hasClass('flip')) return;
@@ -110,7 +110,7 @@ function handleCardClick() {
   updateStats();
 }
 
-// Check if cards match
+
 function checkForMatch() {
   const firstImg = $(gameState.firstCard).find('.front_face').attr('src');
   const secondImg = $(gameState.secondCard).find('.front_face').attr('src');
@@ -122,7 +122,6 @@ function checkForMatch() {
   }
 }
 
-// Handle matching cards
 function handleMatch() {
   if (gameState.pairsMatched < gameState.totalPairs) {
     gameState.pairsMatched++;
@@ -135,7 +134,7 @@ function handleMatch() {
       $('#power-up-btn').prop('disabled', false);
     }
     
-    // Check for win
+
     if (gameState.pairsMatched === gameState.totalPairs) {
       handleWin();
     }
