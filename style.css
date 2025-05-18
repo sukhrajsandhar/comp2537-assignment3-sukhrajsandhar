@@ -85,7 +85,8 @@ button:disabled {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.card:hover {
+/* Only apply hover effect to unflipped cards */
+.card:not(.flip):hover {
   transform: scale(1.02);
 }
 
